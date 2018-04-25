@@ -12,7 +12,14 @@ css styles =
         classname =
             VirtualDom.Styled.getClassname styles
 
-        classProperty =
-            VirtualDom.property "className" (Json.string classname)
+        classAttr =
+            -- It's important to use (attribute "class") over
+            -- (property "className"). The latter stacks, which can cause
+            -- problems with elm-css if you pass a `styled` element to `styled`
+            -- again. The "class" attribute does *not* stack, meaning this will
+            -- blow away the entire class. Although this might be inconvenient
+            -- if you want to specify other classes, at least it will work
+            -- reliably.
+            VirtualDom.attribute "class" (Json.string classname)
     in
-    VirtualDom.Styled.Attribute classProperty styles classname
+    VirtualDom.Styled.Attribute classAttr styles classname
